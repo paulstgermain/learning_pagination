@@ -1,6 +1,11 @@
 const express = require('express');
+const usersRouter = require('./users/users_router');
 
-const app = express();
+const server = express();
+
+server.use(express.json());
+
+server.use('/api', usersRouter);
 
 
-module.exports = app;
+module.exports = server;
