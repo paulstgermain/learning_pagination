@@ -6,8 +6,27 @@ const getUsers = async (page) => {
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
+    const results = {};
 
-    return await db('users').limit(limit).offset(startIndex);
+    const users = await db('users');
+    
+    if (endIndex < await users.length){
+        results.next = {
+            page: page + 1,
+            limit: limit
+        }
+    }
+
+    if (startIndex > 0){
+        results.previous = {
+            page: page - 1,
+            limit: limit
+        }
+    }
+
+    results.paginatedUsers = await db('users').limit(limit).offset(startIndex);
+
+    return results;
 }
 
 module.exports = {
